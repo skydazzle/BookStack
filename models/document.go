@@ -14,6 +14,8 @@ import (
 
 	"crypto/tls"
 
+	"strconv"
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/TruthHun/BookStack/conf"
 	"github.com/TruthHun/BookStack/utils"
@@ -23,27 +25,26 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/httplib"
 	"github.com/astaxie/beego/orm"
+	"github.com/kataras/iris/core/errors"
 )
 
 // Document struct.
 type Document struct {
-	DocumentId   int    `orm:"pk;auto;column(document_id)" json:"doc_id"`
-	DocumentName string `orm:"column(document_name);size(500)" json:"doc_name"`
-	Identify     string `orm:"column(identify);size(100);index;null;default(null)" json:"identify"` // Identify 文档唯一标识
-	BookId       int    `orm:"column(book_id);type(int);index" json:"book_id"`
-	ParentId     int    `orm:"column(parent_id);type(int);index;default(0)" json:"parent_id"`
-	OrderSort    int    `orm:"column(order_sort);default(0);type(int);index" json:"order_sort"`
-	//Markdown     string        `orm:"column(markdown);type(text);null" json:"markdown"` // Markdown markdown格式文档.
-	Release string `orm:"column(release);type(text);null" json:"release"` // Release 发布后的Html格式内容.
-	//Content      string        `orm:"column(content);type(text);null" json:"content"`   // Content 未发布的 Html 格式内容.
-	CreateTime time.Time     `orm:"column(create_time);type(datetime);auto_now_add" json:"create_time"`
-	MemberId   int           `orm:"column(member_id);type(int)" json:"member_id"`
-	ModifyTime time.Time     `orm:"column(modify_time);type(datetime);default(null);auto_now" json:"modify_time"`
-	ModifyAt   int           `orm:"column(modify_at);type(int)" json:"-"`
-	Version    int64         `orm:"type(bigint);column(version)" json:"version"`
-	AttachList []*Attachment `orm:"-" json:"attach"`
-	Vcnt       int           `orm:"column(vcnt);default(0)" json:"vcnt"` //文档项目被浏览次数
-	Markdown   string        `orm:"-" json:"markdown"`
+	DocumentId   int           `orm:"pk;auto;column(document_id)" json:"doc_id"`
+	DocumentName string        `orm:"column(document_name);size(500)" json:"doc_name"`
+	Identify     string        `orm:"column(identify);size(100);index;null;default(null)" json:"identify"` // Identify 文档唯一标识
+	BookId       int           `orm:"column(book_id);type(int);index" json:"book_id"`
+	ParentId     int           `orm:"column(parent_id);type(int);index;default(0)" json:"parent_id"`
+	OrderSort    int           `orm:"column(order_sort);default(0);type(int);index" json:"order_sort"`
+	Release      string        `orm:"column(release);type(text);null" json:"release"` // Release 发布后的Html格式内容.
+	CreateTime   time.Time     `orm:"column(create_time);type(datetime);auto_now_add" json:"create_time"`
+	MemberId     int           `orm:"column(member_id);type(int)" json:"member_id"`
+	ModifyTime   time.Time     `orm:"column(modify_time);type(datetime);default(null);auto_now" json:"modify_time"`
+	ModifyAt     int           `orm:"column(modify_at);type(int)" json:"-"`
+	Version      int64         `orm:"type(bigint);column(version)" json:"version"`
+	AttachList   []*Attachment `orm:"-" json:"attach"`
+	Vcnt         int           `orm:"column(vcnt);default(0)" json:"vcnt"` //文档项目被浏览次数
+	Markdown     string        `orm:"-" json:"markdown"`
 }
 
 // 多字段唯一键
@@ -161,6 +162,9 @@ func (m *Document) RecursiveDocument(doc_id int) error {
 
 //发布文档
 func (m *Document) ReleaseContent(book_id int, base_url string) {
+	utils.BooksRelease.Set(book_id)
+	defer utils.BooksRelease.Delete(book_id)
+
 	//发布的时间戳
 	releaseTime := time.Now()
 
@@ -174,8 +178,9 @@ func (m *Document) ReleaseContent(book_id int, base_url string) {
 	qs := o.QueryTable(tableBooks).Filter("book_id", book_id)
 	qs.One(&book)
 	//查询更新时间大于项目发布时间的文档
-	_, err := o.QueryTable(m.TableNameWithPrefix()).Filter("book_id", book_id).Filter("modify_time__gt", book.ReleaseTime).All(&docs, "document_id")
-	//_, err := o.QueryTable(m.TableNameWithPrefix()).Filter("book_id", book_id).All(&docs, "document_id", "content")
+	//_, err := o.QueryTable(m.TableNameWithPrefix()).Filter("book_id", book_id).Filter("modify_time__gt", book.ReleaseTime).All(&docs, "document_id")
+	//全部重新发布
+	_, err := o.QueryTable(m.TableNameWithPrefix()).Filter("book_id", book_id).All(&docs, "document_id")
 	if err != nil {
 		beego.Error("发布失败 => ", err)
 		return
@@ -184,7 +189,7 @@ func (m *Document) ReleaseContent(book_id int, base_url string) {
 	ModelStore := new(DocumentStore)
 	for _, item := range docs {
 		content := strings.TrimSpace(ModelStore.GetFiledById(item.DocumentId, "content"))
-		if len(content) == 0 {
+		if len(utils.GetTextFromHtml(content)) == 0 {
 			//达到5个协程，休息3秒
 			//if idx%5 == 0 {
 			//	time.Sleep(3 * time.Second)
@@ -220,21 +225,14 @@ func (m *Document) ReleaseContent(book_id int, base_url string) {
 	}); err != nil {
 		beego.Error(err.Error())
 	}
-	utils.ReleaseMapsLock.Lock()
-	delete(utils.ReleaseMaps, book_id)
-	utils.ReleaseMapsLock.Unlock()
 }
 
+//离线文档生成
 func (m *Document) GenerateBook(book *Book, base_url string) {
-	if book.ReleaseTime == book.GenerateTime && book.GenerateTime.Unix() > 0 { //如果文档没有更新，则直接返回，不再生成文档
-		beego.Error("下载文档生成时间跟文档发布时间一致，无需再重新生成下载文档", book)
-		return
-	}
-	qs := orm.NewOrm().QueryTable("md_books").Filter("book_id", book.BookId)
-	//更新上一次下载文档生成时间，以起到加锁的作用
-	qs.Update(orm.Params{
-		"last_click_generate": time.Now(),
-	})
+	//将书籍id加入进去，表示正在生成离线文档
+	utils.BooksGenerate.Set(book.BookId)
+	defer utils.BooksGenerate.Delete(book.BookId) //最后移除
+
 	//公开文档，才生成文档文件
 	debug := true
 	if beego.AppConfig.String("runmode") == "prod" {
@@ -295,7 +293,7 @@ func (m *Document) GenerateBook(book *Book, base_url string) {
 	ModelStore := new(DocumentStore)
 	for _, doc := range docs {
 		content := strings.TrimSpace(ModelStore.GetFiledById(doc.DocumentId, "content"))
-		if content == "" { //内容为空，渲染文档内容，并再重新获取文档内容
+		if utils.GetTextFromHtml(content) == "" { //内容为空，渲染文档内容，并再重新获取文档内容
 			utils.RenderDocumentById(doc.DocumentId)
 			orm.NewOrm().Read(doc, "document_id")
 		}
@@ -339,6 +337,7 @@ func (m *Document) GenerateBook(book *Book, base_url string) {
 
 				}
 			})
+			gq.Find(".markdown-toc").Remove()
 			doc.Release, _ = gq.Find("body").Html()
 		}
 
@@ -370,8 +369,15 @@ func (m *Document) GenerateBook(book *Book, base_url string) {
 
 	//将文档移动到oss
 	//将PDF文档移动到oss
-	newBook := fmt.Sprintf("projects/%v/books/%v", book.Identify, book.ReleaseTime.Unix())
-	oldBook := fmt.Sprintf("projects/%v/books/%v", book.Identify, book.GenerateTime.Unix())
+	oldBook := fmt.Sprintf("projects/%v/books/%v", book.Identify, book.GenerateTime.Unix()) //旧书籍的生成时间
+	//最后再更新文档生成时间
+	book.GenerateTime = time.Now()
+	if _, err = orm.NewOrm().Update(book, "generate_time"); err != nil {
+		beego.Error(err.Error())
+	}
+	orm.NewOrm().Read(book)
+	newBook := fmt.Sprintf("projects/%v/books/%v", book.Identify, book.GenerateTime.Unix())
+
 	exts := []string{".pdf", ".epub", ".mobi"}
 	for _, ext := range exts {
 		switch utils.StoreType {
@@ -387,6 +393,7 @@ func (m *Document) GenerateBook(book *Book, base_url string) {
 		}
 
 	}
+
 	//删除旧文件
 	switch utils.StoreType {
 	case utils.StoreOss:
@@ -399,11 +406,9 @@ func (m *Document) GenerateBook(book *Book, base_url string) {
 		}
 	}
 
-	//最后再更新文档生成时间
-	if _, err = qs.Update(orm.Params{"generate_time": book.ReleaseTime}); err != nil {
-		beego.Error(err.Error())
-	}
-
+	//if _, err = orm.NewOrm().QueryTable("md_books").Filter("book_id", book.BookId).Update(orm.Params{"generate_time": NewGenerateTime}); err != nil {
+	//	beego.Error(err.Error())
+	//}
 }
 
 //根据项目ID查询文档列表.
@@ -424,6 +429,84 @@ func (m *Document) GetMenuTop(book_id int) (docs []*Document, err error) {
 		if !strings.HasPrefix(doc.Identify, ".") {
 			docs = append(docs, doc)
 		}
+	}
+	return
+}
+
+//自动生成下一级的内容
+func (m *Document) BookStackAuto(bookId, docId int) (md, cont string) {
+	//自动生成文档内容
+	var docs []Document
+	orm.NewOrm().QueryTable("md_documents").Filter("book_id", bookId).Filter("parent_id", docId).OrderBy("order_sort").All(&docs, "document_id", "document_name", "identify")
+	var newCont []string //新HTML内容
+	var newMd []string   //新markdown内容
+	for _, idoc := range docs {
+		newMd = append(newMd, fmt.Sprintf(`- [%v]($%v)`, idoc.DocumentName, idoc.Identify))
+		newCont = append(newCont, fmt.Sprintf(`<li><a href="$%v">%v</a></li>`, idoc.Identify, idoc.DocumentName))
+	}
+	md = strings.Join(newMd, "\n")
+	cont = "<ul>" + strings.Join(newCont, "") + "</ul>"
+	return
+}
+
+//爬虫批量采集
+//@param		html				html
+//@param		md					markdown内容
+//@return		content,markdown	把链接替换为标识后的内容
+func (m *Document) BookStackCrawl(html, md string, bookId, uid int) (content, markdown string, err error) {
+	var gq *goquery.Document
+	content = html
+	markdown = md
+	//执行采集
+	if gq, err = goquery.NewDocumentFromReader(strings.NewReader(content)); err == nil {
+		//采集模式mode
+		CrawlByChrome := false
+		if strings.ToLower(gq.Find("mode").Text()) == "chrome" {
+			CrawlByChrome = true
+		}
+		beego.Error("chome", CrawlByChrome)
+		//内容选择器selector
+		selector := ""
+		if selector = strings.ToLower(gq.Find("selector").Text()); selector == "" {
+			err = errors.New("内容选择器不能为空")
+			return
+		}
+
+		gq.Find("a").Each(func(i int, selection *goquery.Selection) {
+			if href, ok := selection.Attr("href"); ok {
+				hrefLower := strings.ToLower(href)
+				//以http或者https开头
+				if strings.HasPrefix(hrefLower, "http://") || strings.HasPrefix(hrefLower, "https://") {
+					//采集文章内容成功，创建文档，填充内容，替换链接为标识
+					if retmd, err := utils.CrawlHtml2Markdown(href, 0, CrawlByChrome, 2, selector); err == nil {
+						var doc Document
+						identify := strconv.Itoa(i) + ".md"
+						doc.Identify = identify
+						doc.BookId = bookId
+						doc.Version = time.Now().Unix()
+						doc.ModifyAt = int(time.Now().Unix())
+						doc.DocumentName = selection.Text()
+						doc.MemberId = uid
+
+						if docId, err := doc.InsertOrUpdate(); err != nil {
+							beego.Error("InsertOrUpdate => ", err)
+						} else {
+							var ds DocumentStore
+							ds.DocumentId = int(docId)
+							ds.Markdown = "[TOC]\n\r\n\r" + retmd
+							if err := new(DocumentStore).InsertOrUpdate(ds, "markdown", "content"); err != nil {
+								beego.Error(err)
+							}
+						}
+						selection = selection.SetAttr("href", "$"+identify)
+						markdown = strings.Replace(markdown, href, "$"+identify, -1)
+					} else {
+						beego.Error(err.Error())
+					}
+				}
+			}
+		})
+		content, _ = gq.Find("body").Html()
 	}
 	return
 }

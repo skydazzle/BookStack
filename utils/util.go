@@ -26,8 +26,6 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/huichen/sego"
 
-	"sync"
-
 	"github.com/TruthHun/html2md"
 )
 
@@ -41,11 +39,9 @@ const (
 
 //分词器
 var (
-	Segmenter       sego.Segmenter
-	ReleaseMaps     = make(map[int]bool) //是否正在发布内容，map[book_id]bool
-	ReleaseMapsLock sync.RWMutex
-	BasePath, _            = filepath.Abs(filepath.Dir(os.Args[0]))
-	StoreType       string = beego.AppConfig.String("store_type") //存储类型
+	Segmenter   sego.Segmenter
+	BasePath, _        = filepath.Abs(filepath.Dir(os.Args[0]))
+	StoreType   string = beego.AppConfig.String("store_type") //存储类型
 )
 
 func init() {
@@ -143,7 +139,7 @@ func CrawlHtml2Markdown(urlstr string, contType int, force bool, intelligence in
 
 	if err == nil {
 		//http://www.bookstack.cn/login.html
-		slice := strings.Split(strings.TrimRight(urlstr, "/")+"/", "/")
+		slice := strings.Split(strings.TrimSpace(urlstr), "/")
 		if sliceLen := len(slice); sliceLen > 2 {
 			var doc *goquery.Document
 			if doc, err = goquery.NewDocumentFromReader(strings.NewReader(cont)); err == nil {
@@ -380,6 +376,13 @@ func NewPaginations(rollPage, totalRows, listRows, currentPage int, urlPrefix st
 func InMap(maps map[int]bool, key int) (ret bool) {
 	if _, ok := maps[key]; ok {
 		return true
+	}
+	return
+}
+
+func GetTextFromHtml(htmlstr string) (txt string) {
+	if doc, err := goquery.NewDocumentFromReader(strings.NewReader(htmlstr)); err == nil {
+		txt = strings.TrimSpace(doc.Find("body").Text())
 	}
 	return
 }
