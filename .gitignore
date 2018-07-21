@@ -28,7 +28,6 @@ _testmain.go
 logs/*
 .DS_Store
 mindoc
-BookStack
 BookStack.exe
 BookStack.exe~
 cache/
