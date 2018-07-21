@@ -6,7 +6,7 @@
 IsInternal=false
 
 # 内网Endpoint,如：oss-cn-hongkong-internal.aliyuncs.com
-EndpointInternal=ttps://oss-cn-shenzhen-internal.aliyuncs.com
+EndpointInternal=https://oss-cn-shenzhen-internal.aliyuncs.com
 
 # 外网Endpoint，如：oss-cn-hongkong.aliyuncs.com
 EndpointOuter=https://oss-cn-shenzhen.aliyuncs.com

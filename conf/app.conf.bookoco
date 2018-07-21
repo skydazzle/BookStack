@@ -14,7 +14,7 @@ runmode = dev
 sessionon = true
 
 # session名称，这个你自己定。
-sessionname = bookstack
+sessionname = bookoco
 copyrequestbody = true
 
 # 启动gzip压缩，则设置为true，否则设置为false。建议启动
@@ -62,7 +62,7 @@ timezone = Asia/Shanghai
 db_adapter=mysql
 
 # 您的数据库host
-db_host=127.0.0.1
+db_host=172.18.37.161
 
 #您的数据库端口
 db_port=3306
@@ -71,7 +71,7 @@ db_port=3306
 db_username=root
 
 # 您的数据库密码
-db_password=
+db_password=root
 
 #您使用的数据库
 db_database=bookstack
@@ -107,7 +107,7 @@ smtp_user_name=640666564@qq.com
 #smtp服务器地址
 smtp_host=smtp.qq.com
 #smtp密码
-smtp_password=tianxuan8$
+smtp_password=wrhmvxdfprflbajf
 #端口号
 smtp_port=465
 #发送邮件的显示名称
