@@ -103,7 +103,7 @@ func SendMail(conf *conf.SmtpConf, subject, email string, body string) error {
 //渲染markdown为html并录入数据库
 func RenderDocumentById(id int) {
 	//使用chromium-browser
-	//	chromium-browser --headless --disable-gpu --screenshot --no-sandbox --window-size=320,480 http://www.bookstack.cn
+	//	chromium-browser --headless --disable-gpu --screenshot --no-sandbox --window-size=320,480 http://www.bookoco.com
 	link := "http://localhost:" + beego.AppConfig.DefaultString("httpport", "8080") + "/local-render?id=" + strconv.Itoa(id)
 	chrome := beego.AppConfig.DefaultString("chrome", "chromium-browser")
 	args := []string{"--headless", "--disable-gpu", "--screenshot", "--no-sandbox", "--window-size=320,480", link}
@@ -138,7 +138,7 @@ func CrawlHtml2Markdown(urlstr string, contType int, force bool, intelligence in
 	}
 
 	if err == nil {
-		//http://www.bookstack.cn/login.html
+		//http://www.bookoco.com/login.html
 		slice := strings.Split(strings.TrimSpace(urlstr), "/")
 		if sliceLen := len(slice); sliceLen > 2 {
 			var doc *goquery.Document

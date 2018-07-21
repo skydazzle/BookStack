@@ -1,6 +1,6 @@
-Linux(Ubuntu)下安装和部署 - 《书栈(BookStack)使用手册》 - 书栈网(BookStack.CN)               
+Linux(Ubuntu)下安装和部署 - 《书云(BookStack)使用手册》 - 书云网(bookoco.com)               
 
-[书栈(BookStack)使用手册](/books/help "书栈(BookStack)使用手册")
+[书云(BookStack)使用手册](/books/help "书云(BookStack)使用手册")
 
 Linux(Ubuntu)下安装和部署
 ===================
@@ -83,7 +83,7 @@ calibre官网：[https://www.calibre-ebook.com/](https://www.calibre-ebook.com/)
 
 随便创建一个txt文件
 
-1.  `echo "Hello BookStack。你好，书栈。"  > test.txt`
+1.  `echo "Hello BookStack。你好，书云。"  > test.txt`
 
 转成pdf
 
@@ -190,12 +190,12 @@ calibre官网：[https://www.calibre-ebook.com/](https://www.calibre-ebook.com/)
 44.  `#评论时间间隔，每次发表评论，限定间隔秒数，避免被恶意刷评论`
 45.  `CommentInterval=10`
 
-47.  `# 生成下载文档时导出pdf文档的配置，这里建议把关于bookstack.cn的信息替换成你自己的就行，其他的建议不要动`
+47.  `# 生成下载文档时导出pdf文档的配置，这里建议把关于bookoco.com的信息替换成你自己的就行，其他的建议不要动`
 48.  `exportHeader=<p style='color:#8E8E8E;font-size:12px;'>_SECTION_</p>`
-49.  `exportFooter=<p style='color:#8E8E8E;font-size:12px;'>本文档使用  <a href='http://www.bookstack.cn' style='text-decoration:none;color:#1abc9c;font-weight:bold;'>书栈(BookStack.CN)</a> 构建 <span style='float:right'>- _PAGENUM_ -</span></p>`
+49.  `exportFooter=<p style='color:#8E8E8E;font-size:12px;'>本文档使用  <a href='http://www.bookoco.com' style='text-decoration:none;color:#1abc9c;font-weight:bold;'>书云网(bookoco.com)</a> 构建 <span style='float:right'>- _PAGENUM_ -</span></p>`
 50.  `exportFontSize=14`
 51.  `exportPaperSize=a4`
-52.  `exportCreator=书栈(BookStack.CN)`
+52.  `exportCreator=书云网(bookoco.com)`
 53.  `exportMarginLeft=72`
 54.  `exportMarginRight=72`
 55.  `exportMarginTop=72`
@@ -223,7 +223,7 @@ calibre官网：[https://www.calibre-ebook.com/](https://www.calibre-ebook.com/)
 77.  `db_database=bookstack`
 
 81.  `# 静态资源域名，没有则留空。比如你将static目录下的所有静态资源都放到了专门的服务器上，那么这个域名就行用来访问你的静态资源的域名。`
-82.  `static_domain=http://static.bookstack.cn`
+82.  `static_domain=http://static.bookoco.com`
 
 84.  `# 谷歌浏览器，用于发布内容的时候渲染未被渲染的markdown。建议安装最新版的Chrome浏览器，并把Chrome浏览器加入系统环境变量。`
 85.  `# 使用Chrome的headless去处理。之前考虑使用phantomjs的，但是phantomjs有些小问题，不如Chrome强大。`
@@ -247,7 +247,7 @@ calibre官网：[https://www.calibre-ebook.com/](https://www.calibre-ebook.com/)
 103.  `#每小时限制指定邮箱邮件发送次数`
 104.  `mail_number=5`
 105.  `#smtp服务用户名`
-106.  `smtp_user_name=admin@bookstack.cn`
+106.  `smtp_user_name=admin@bookoco.com`
 107.  `#smtp服务器地址`
 108.  `smtp_host=smtpdm.aliyun.com`
 109.  `#smtp密码`
@@ -255,7 +255,7 @@ calibre官网：[https://www.calibre-ebook.com/](https://www.calibre-ebook.com/)
 111.  `#端口号`
 112.  `smtp_port=25`
 113.  `#发送邮件的显示名称`
-114.  `form_user_name=admin@bookstack.cn`
+114.  `form_user_name=admin@bookoco.com`
 
 116.  `#接收回件的邮箱。留空则表示使用发送邮件的邮箱作为接收回件邮箱`
 117.  `reply_user_name=bookstack@qq.com`
@@ -295,7 +295,7 @@ calibre官网：[https://www.calibre-ebook.com/](https://www.calibre-ebook.com/)
 2.  `styleName:avatar,styleBody:image/resize,m_fill,w_100,h_100,limit_0/auto-orient,1/quality,q_90`
 
 3、在OSS的`图片处理`-`导入样式`中，将该txt文档导入  
-![](http://static.bookstack.cn/projects/help/1516802da0987a00.png)
+![](http://static.bookoco.com/projects/help/1516802da0987a00.png)
 
 4、将`oss.conf.example`修改成`oss.conf`，并根据您的阿里云OSS，配置该文件。
 
@@ -340,8 +340,8 @@ calibre官网：[https://www.calibre-ebook.com/](https://www.calibre-ebook.com/)
 10.  `# 您的ClientSecret`
 11.  `giteeClientSecret=`
 
-13.  `# 回调地址，把下面的bookstack.cn的域名换成你的即可`
-14.  `giteeCallback=http://www.bookstack.cn/login/gitee`
+13.  `# 回调地址，把下面的bookoco.com的域名换成你的即可`
+14.  `giteeCallback=http://www.bookoco.com/login/gitee`
 
 16.  `# 下面这两项不要动`
 17.  `giteeAccesstoken=https://gitee.com/oauth/token`
@@ -356,8 +356,8 @@ calibre官网：[https://www.calibre-ebook.com/](https://www.calibre-ebook.com/)
 28.  `# 您的ClientSecret`
 29.  `githubClientSecret=`
 
-31.  `# 回调地址，把下面的bookstack.cn的域名换成你的即可`
-32.  `githubCallback=http://www.bookstack.cn/login/github`
+31.  `# 回调地址，把下面的bookoco.com的域名换成你的即可`
+32.  `githubCallback=http://www.bookoco.com/login/github`
 
 34.  `# 下面这两项不要动`
 35.  `githubAccesstoken=https://github.com/login/oauth/access_token`
@@ -372,8 +372,8 @@ calibre官网：[https://www.calibre-ebook.com/](https://www.calibre-ebook.com/)
 46.  `#ClientSecret，即 APP Key`
 47.  `qqClientSecret=`
 
-49.  `# 回调地址，把下面的bookstack.cn的域名换成你的即可`
-50.  `qqCallback=http://www.bookstack.cn/login/qq`
+49.  `# 回调地址，把下面的bookoco.com的域名换成你的即可`
+50.  `qqCallback=http://www.bookoco.com/login/qq`
 
 52.  `# 下面这三项不要动`
 53.  `qqAccesstoken=https://graph.qq.com/oauth2.0/token`
@@ -401,9 +401,9 @@ Nginx反向代理配置参考(宝塔的配置)：
 1.  `server`
 2.  `{`
 3.   `listen 80;`
-4.   `server_name demo.bookstack.cn;`
+4.   `server_name demo.bookoco.com;`
 5.   `index index.php index.html index.htm default.php default.htm default.html;`
-6.   `root /www/wwwroot/demo.bookstack.cn;`
+6.   `root /www/wwwroot/demo.bookoco.com;`
 
 9.   `location /` 
 10.   `{`
@@ -442,7 +442,7 @@ Nginx反向代理配置参考(宝塔的配置)：
 43.   `#PHP-INFO-END`
 
 45.   `#REWRITE-START URL重写规则引用,修改后将导致面板设置的伪静态规则失效`
-46.   `include /www/server/panel/vhost/rewrite/demo.bookstack.cn.conf;`
+46.   `include /www/server/panel/vhost/rewrite/demo.bookoco.com.conf;`
 47.   `#REWRITE-END`
 
 49.   `#禁止访问的文件或目录`
@@ -476,8 +476,8 @@ Nginx反向代理配置参考(宝塔的配置)：
 配置示例：
 
 1.  `[program:BookStack]`
-2.  `directory =  /www/wwwroot/demo.bookstack.cn`
-3.  `command =/www/wwwroot/demo.bookstack.cn/BookStack`
+2.  `directory =  /www/wwwroot/demo.bookoco.com`
+3.  `command =/www/wwwroot/demo.bookoco.com/BookStack`
 4.  `autostart =  true`
 5.  `autorestart=true`
 6.  `user = root`

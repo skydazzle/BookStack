@@ -11,6 +11,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
+// TODO 不确定这个函数 cc 20180714
 //检查最新版本.
 func CheckUpdate() {
 

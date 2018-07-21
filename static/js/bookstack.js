@@ -31,7 +31,7 @@
 //         },
 //         success : function (res) {
 //             if(res.errcode === 0){
-//                 console.log("bookstack.cn");
+//                 console.log("bookoco.com");
 //                 var body = res.data.body;
 //                 var doc_title = res.data.doc_title;
 //                 var title = res.data.title;
