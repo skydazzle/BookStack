@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 MAINTAINER "skydazzle <skydazzle@qq.com>"
 
-# 安装依赖
+# 安装 依赖
 RUN apt update -y \
     && apt install -y locales \
     && rm -rf /var/lib/apt/lists/* \
