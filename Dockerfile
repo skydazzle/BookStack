@@ -24,6 +24,4 @@ RUN chmod 0777 -R /www/BookStack/
 
 WORKDIR /www/BookStack/
 
-RUN ./BookStack install
-
 CMD [ "./BookStack" ]
