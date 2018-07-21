@@ -43,7 +43,7 @@ BookStack是基于[Mindoc](https://github.com/lifei6671/mindoc)开发的，为�
 v1.0版本有很多地方不适于用于运营，使用v1.0版本的用户，建议升级到v1.1版本。关于升级，请看[安装与使用](#install)
 
 
-> 关于BookStack使用文档难产：程序从v1.0开发升级到v1.1，满打满算用了一天的时间；而光写`readme.md`这个文档，当初就花了足足两天时间...会抽时间在开发v1.2版本前，把使用文档撰写出来，届时使用文档将发布在书栈网的[书栈(BookStack)使用手册](http://www.bookstack.cn/books/help)。
+> 关于BookStack使用文档难产：程序从v1.0开发升级到v1.1，满打满算用了一天的时间；而光写`readme.md`这个文档，当初就花了足足两天时间...会抽时间在开发v1.2版本前，把使用文档撰写出来，届时使用文档将发布在书云网的[书云(BookStack)使用手册](http://www.bookoco.com/books/help)。
 
 <a name="open"></a>
 ## 开源
@@ -74,13 +74,13 @@ v1.0版本有很多地方不适于用于运营，使用v1.0版本的用户，建
 
 <a name="demo"></a>
 ### 演示站点
-[http://demo.bookstack.cn](http://demo.bookstack.cn)
+[http://demo.bookoco.com](http://demo.bookoco.com)
 
 有些功能，只有拥有管理员权限的用户才能使用，所以放出演示站点，欢迎大家随便玩。
 管理员账号和密码如下（请大家不要更改密码，以方便大家体验，谢谢）：
 ```
 账号：bookstack
-密码：bookstack.cn
+密码：bookoco.com
 ```
 Tips:
 - 如果管理员账号密码被修改，请在演示站点上注册一个账号，并把账号通过邮件发送给我，让我把你的账号设置成管理员。我的联系邮箱：TruthHun@QQ.COM
@@ -88,7 +88,7 @@ Tips:
 
 <a name="normal"></a>
 ### 正式站点
-[http://www.bookstack.cn](http://www.bookstack.cn)
+[http://www.bookoco.com](http://www.bookoco.com)
 
 因为演示站点上的内容，大家在测试的时候，肯定是各种乱七八糟的什么内容都有，所以放出正式站点，给大家看下真正的效果。
 还望大家不要在这个站点发一些乱七八糟的内容，毕竟这是正式站点，谢谢。
@@ -241,7 +241,7 @@ Tips:
 ## 安装与使用
 
 
-为了方便，安装和使用教程，请移步到这里：http://www.bookstack.cn/read/help/Ubuntu.md
+为了方便，安装和使用教程，请移步到这里：http://www.bookoco.com/read/help/Ubuntu.md
 > 目前只写了Ubuntu下的安装教程，Windows下的安装和使用教程，暂时没时间
 
 有两个模板文件，需要手动修改下：
@@ -279,7 +279,7 @@ go build
 ```
 ./BookStack install
 ```
-自动创建mysql表结构和数据
+会自动创建mysql表结构和数据
 
 
 ### beego编译和启动
