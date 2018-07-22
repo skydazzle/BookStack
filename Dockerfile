@@ -1,18 +1,4 @@
-FROM ubuntu:16.04
-
-MAINTAINER "skydazzle <skydazzle@qq.com>"
-
-# 安装 依赖
-RUN apt update -y \
-    && apt install -y locales \
-    && rm -rf /var/lib/apt/lists/* \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    && apt update -y \
-    && apt install -y fonts-wqy-zenhei fonts-wqy-microhei \
-    && apt install -y xdg-utils wget xz-utils python chromium-browser \
-    && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh /dev/stdin
-
-ENV LANG en_US.utf8
+FROM registry.cn-shenzhen.aliyuncs.com/bookoco/bookoco-base:latest
 
 # 将程序拷贝进去
 COPY . /www/BookStack/
