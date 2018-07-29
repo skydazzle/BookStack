@@ -45,46 +45,9 @@ v1.0版本有很多地方不适于用于运营，使用v1.0版本的用户，建
 
 > 关于BookStack使用文档难产：程序从v1.0开发升级到v1.1，满打满算用了一天的时间；而光写`readme.md`这个文档，当初就花了足足两天时间...会抽时间在开发v1.2版本前，把使用文档撰写出来，届时使用文档将发布在书云网的[书云(BookStack)使用手册](http://www.bookoco.com/books/help)。
 
-<a name="open"></a>
-## 开源
-两年前还在做PHP开发的时候，无意间遇到了Gitbook，以及看云，还有readthedoc。
-
-当时想着自己也开发一套，但是后来没时间，当时也没那个技术积累。
-
-后来学了Go语言，又在无意间遇到了[Mindoc](https://github.com/lifei6671/mindoc)，然后我们公司([掘金量化](https://www.myquant.cn) )也恰巧让我开发公司官网和文档系统，然后我就对[Mindoc](https://github.com/lifei6671/mindoc)做了二次开发。
-
-本来是不想开源的，因为自己写代码的时候，写着写着，代码改来改去，然后代码就乱七八糟了，怕开源出来丢人现眼。但是踏入IT行业三年多时间以来，自身也受益于各种开源项目和开源组件，所以最终还是决定将BookStack开源出来。
-
-其中肯定还是有不足的地方，大家在使用的过程中，遇到问题，欢迎反馈。
-
-源码托管：
-- Github: https://github.com/TruthHun/BookStack
-- Gitee: https://gitee.com/truthhun/BookStack
-
-<a name="qqgroup"></a>
-## QQ交流群
-为方便相互学习和交流，建了个QQ群，加群请备注`来自BookStack`
-
-> QQ交流群：457803862(猿军团)
-
-同时要说明的是，这个是学习交流群，如果是程序相关问题，请提交issue，再把issue链接发群里。
 
 <a name="site"></a>
 ## 站点
-
-<a name="demo"></a>
-### 演示站点
-[http://demo.bookoco.com](http://demo.bookoco.com)
-
-有些功能，只有拥有管理员权限的用户才能使用，所以放出演示站点，欢迎大家随便玩。
-管理员账号和密码如下（请大家不要更改密码，以方便大家体验，谢谢）：
-```
-账号：bookstack
-密码：bookoco.com
-```
-Tips:
-- 如果管理员账号密码被修改，请在演示站点上注册一个账号，并把账号通过邮件发送给我，让我把你的账号设置成管理员。我的联系邮箱：TruthHun@QQ.COM
-- 演示站点的第三方登录并未配置，注册账号时，请直接邮箱注册即可。
 
 <a name="normal"></a>
 ### 正式站点

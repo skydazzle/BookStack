@@ -309,7 +309,7 @@ func (this *BaseController) sortBySummary(bookIdentify, htmlstr string, book_id 
 			}
 			if doc_id > 0 {
 				qs.Filter("document_id", doc_id).Update(orm.Params{
-					"parent_id": pid, "document_name": doc_name,
+					"parent_id":  pid, "document_name": doc_name,
 					"order_sort": idx, "modify_time": time.Now(),
 				})
 			}
@@ -325,7 +325,7 @@ func (this *BaseController) sortBySummary(bookIdentify, htmlstr string, book_id 
 			}
 
 			if _, err := qs.Filter("identify", identify).Update(orm.Params{
-				"parent_id": pid, "document_name": doc_name,
+				"parent_id":  pid, "document_name": doc_name,
 				"order_sort": idx, "modify_time": time.Now(),
 			}); err != nil {
 				beego.Error(err)

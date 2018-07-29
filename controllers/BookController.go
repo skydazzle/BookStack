@@ -748,10 +748,11 @@ func (this *BookController) DownloadProject() {
 		this.JsonResult(1, err.Error())
 	}
 
-	//普通用户没有权限
-	if this.Member.Role > 1 {
-		this.JsonResult(1, "您没有操作权限")
-	}
+	// 所有用户都有权限 cc
+	////普通用户没有权限
+	//if this.Member.Role > 1 {
+	//	this.JsonResult(1, "您没有操作权限")
+	//}
 
 	identify := this.GetString("identify")
 	book, _ := models.NewBookResult().FindByIdentify(identify, this.Member.MemberId)
@@ -783,10 +784,11 @@ func (this *BookController) UploadProject() {
 		this.JsonResult(1, err.Error())
 	}
 
-	//普通用户没法上传项目
-	if this.Member.Role > 1 {
-		this.JsonResult(1, "您没有操作权限")
-	}
+	// 所有用户都有权限 cc
+	////普通用户没法上传项目
+	//if this.Member.Role > 1 {
+	//	this.JsonResult(1, "您没有操作权限")
+	//}
 
 	identify := this.GetString("identify")
 

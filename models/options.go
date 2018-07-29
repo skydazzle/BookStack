@@ -137,7 +137,7 @@ func (m *Option) Init() error {
 	}
 	if !o.QueryTable(m.TableNameWithPrefix()).Filter("option_name", "SITE_NAME").Exist() {
 		option := NewOption()
-		option.OptionValue = "BookStack"
+		option.OptionValue = "bookoco"
 		option.OptionName = "SITE_NAME"
 		option.OptionTitle = "站点名称"
 		if _, err := o.Insert(option); err != nil {
@@ -146,7 +146,7 @@ func (m *Option) Init() error {
 	}
 	if !o.QueryTable(m.TableNameWithPrefix()).Filter("option_name", "ICP").Exist() {
 		option := NewOption()
-		option.OptionValue = ""
+		option.OptionValue = "粤ICP备18091905号"
 		option.OptionName = "ICP"
 		option.OptionTitle = "网站备案"
 		if _, err := o.Insert(option); err != nil {

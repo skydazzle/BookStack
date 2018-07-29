@@ -95,7 +95,7 @@
                                             <a :href="'/api/' + item.identify + '/edit'" title="编辑文档" data-toggle="tooltip" class="btn btn-default btn-sm" target="_blank"><i class="fa fa-edit" aria-hidden="true"></i> 编辑<span class="hidden-xs">文档</span></a>
                                         </template>
                                         <a :href="'/book/' + item.identify + '/setting'" title="项目设置" class="btn btn-default btn-sm" data-toggle="tooltip" target="_blank"><i class="fa fa-cogs"></i> <span class="hidden-xs">项目</span>设置</a>
-                                        {{if lt $.Member.Role 2}}
+                                        {{/* 所有用户都有权限 cc  if lt $.Member.Role 2 */}}
                                         <a href="javascript:void(0);" class="btn btn-default btn-upload-zip  btn-sm" data-toggle="tooltip" :data-identify="item.identify" title="支持任意zip压缩的markdown项目导入。">
                                             <i class="fa fa-cloud-upload"></i> 导入<span class="hidden-xs">项目</span>
                                         </a>
@@ -103,7 +103,7 @@
                                             <i class="fa fa-link"></i> 拉取<span class="hidden-xs">项目</span>
                                         </a>
 
-                                        {{end}}
+                                        {{/* end */}}
                                         <a :href="'/book/'+ item.identify +'/generate'" class="btn btn-default btn-sm ajax-get confirm" :data-identify="item.identify">
                                             <i class="fa fa-book"></i> 生成下载文档
                                         </a>
