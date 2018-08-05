@@ -32,9 +32,9 @@
 <a name="intro"></a>
 # BookStack 简介
 
-BookStack，分享知识，共享智慧！知识，因分享，传承久远！
+bookoco，分享知识，共享智慧！知识，因分享，传承久远！
 
-BookStack是基于[Mindoc](https://github.com/lifei6671/mindoc)开发的，为运营而生。
+bookoco是基于[Mindoc](https://github.com/lifei6671/mindoc)开发的，为运营而生。
 
 在开发的过程中，增加和移除了一些东西，目前已经不兼容MinDoc了（毕竟数据表结构、字段、索引都有了一些不同），同时只支持markdown编辑器。
 
