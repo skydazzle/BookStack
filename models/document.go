@@ -96,16 +96,19 @@ func (m *Document) InsertOrUpdate(cols ...string) (id int64, err error) {
 	id = int64(m.DocumentId)
 	m.ModifyTime = time.Now()
 	if m.DocumentId > 0 { //文档id存在，则更新
+		m.CreateTime = time.Now()
 		_, err = o.Update(m, cols...)
 	} else {
 		var mm Document
 		//直接查询一个字段，优化MySQL IO
-		o.QueryTable("md_documents").Filter("identify", m.Identify).Filter("book_id", m.BookId).One(&mm, "document_id")
+		o.QueryTable("md_documents").Filter("identify", m.Identify).Filter("book_id", m.BookId).One(&mm, "document_id","create_time")
 		if mm.DocumentId == 0 {
 			m.CreateTime = time.Now()
 			id, err = o.Insert(m)
 			NewBook().ResetDocumentNumber(m.BookId)
 		} else { //identify存在，则执行更新
+			m.DocumentId = mm.DocumentId
+			m.CreateTime = mm.CreateTime
 			_, err = o.Update(m)
 			id = int64(mm.DocumentId)
 		}

@@ -921,6 +921,12 @@ func (this *DocumentController) Content() {
 
 //导出文件
 func (this *DocumentController) Export() {
+	// 权限控制 cc
+	//普通用户没有权限
+	if this.Member.Role > 1 {
+		this.JsonResult(1, "您没有操作权限，有需要请发送邮箱:skydazzle24@126.com")
+	}
+
 	this.TplName = "document/export.html"
 	identify := this.Ctx.Input.Param(":key")
 	ext := strings.ToLower(this.GetString("output"))

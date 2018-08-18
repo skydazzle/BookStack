@@ -645,6 +645,12 @@ func (this *BookController) Release() {
 //生成下载文档
 //加锁，防止用户不停地点击生成下载文档造成服务器资源开销.
 func (this *BookController) Generate() {
+	// 权限控制 cc
+	//普通用户没有权限
+	if this.Member.Role > 1 {
+		this.JsonResult(1, "您没有操作权限，有需要请发送邮箱:skydazzle24@126.com")
+	}
+
 	identify := this.GetString(":key")
 	book, err := models.NewBook().FindByIdentify(identify)
 
@@ -748,11 +754,10 @@ func (this *BookController) DownloadProject() {
 		this.JsonResult(1, err.Error())
 	}
 
-	// 所有用户都有权限 cc
-	////普通用户没有权限
-	//if this.Member.Role > 1 {
-	//	this.JsonResult(1, "您没有操作权限")
-	//}
+	//普通用户没有权限
+	if this.Member.Role > 1 {
+		this.JsonResult(1, "您没有操作权限，有需要请发送邮箱:skydazzle24@126.com")
+	}
 
 	identify := this.GetString("identify")
 	book, _ := models.NewBookResult().FindByIdentify(identify, this.Member.MemberId)
@@ -877,6 +882,7 @@ func (this *BookController) unzipToData(book_id int, identify, zipfile, originFi
 								mdcont = "[TOC]\r\n\r\n" + mdcont
 							}
 							htmlstr := mdtil.Md2html(mdcont)
+							doc.Release = htmlstr
 							doc.DocumentName = utils.ParseTitleFromMdHtml(htmlstr)
 							doc.BookId = book_id
 							//文档标识
@@ -890,7 +896,8 @@ func (this *BookController) unzipToData(book_id int, identify, zipfile, originFi
 								if err := ModelStore.InsertOrUpdate(models.DocumentStore{
 									DocumentId: int(doc_id),
 									Markdown:   mdcont,
-								}, "markdown"); err != nil {
+									Content: htmlstr,
+								}, "markdown", "content"); err != nil {
 									beego.Error(err)
 								}
 							} else {
