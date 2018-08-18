@@ -646,7 +646,7 @@ func (this *BookController) Release() {
 //加锁，防止用户不停地点击生成下载文档造成服务器资源开销.
 func (this *BookController) Generate() {
 	// 权限控制 cc
-	//普通用户没有权限
+	// 普通用户没有权限
 	if this.Member.Role > 1 {
 		this.JsonResult(1, "您没有操作权限，有需要请发送邮箱:skydazzle24@126.com")
 	}
