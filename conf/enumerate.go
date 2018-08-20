@@ -31,6 +31,8 @@ const (
 	MemberAdminRole = 1
 	//普通用户.
 	MemberGeneralRole = 2
+	//游客用户.
+	MemberGuestRole = 3
 )
 
 const (

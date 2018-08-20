@@ -228,6 +228,8 @@ func (m *Member) ResolveRoleName() {
 		m.RoleName = "管理员"
 	} else if m.Role == conf.MemberGeneralRole {
 		m.RoleName = "普通用户"
+	}else{
+		m.RoleName = "游客用户"
 	}
 }
 
